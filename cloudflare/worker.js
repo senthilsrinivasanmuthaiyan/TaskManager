@@ -91,6 +91,11 @@ async function modelText(env,system,user) {
   const result = await env.AI.run(MODEL,{messages:[{role:"system",content:system},{role:"user",content:user}],max_tokens:1200});
   return {enabled:true,answer:result.response || result.output_text || JSON.stringify(result)};
 }
+async function ipFingerprint(request) {
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const digest = await crypto.subtle.digest("SHA-256",encoder.encode(ip));
+  return b64url(new Uint8Array(digest));
+}
 async function handleApi(request,env) {
   const url = new URL(request.url);
   if (url.pathname === "/api/login" && request.method === "POST") {
