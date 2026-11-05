@@ -1,0 +1,35 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: erp-super-agent-ollama
+    restart: unless-stopped
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  super-agent:
+    build: .
+    container_name: erp-super-agent
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    environment:
+      LLM_BASE_URL: http://ollama:11434/v1
+      LLM_API_KEY: ollama
+      LLM_MODEL: ${LLM_MODEL:-deepseek-r1:8b}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      GITHUB_API_URL: https://api.github.com
+      GITHUB_WRITE_ENABLED: "false"
+      GITHUB_ALLOWED_REPOS: ${GITHUB_ALLOWED_REPOS:-}
+      DATABASE_PATH: /app/data/superagent.db
+      MAX_PARALLEL_REPOS: ${MAX_PARALLEL_REPOS:-4}
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  ollama_data:
