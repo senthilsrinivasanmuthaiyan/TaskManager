@@ -101,7 +101,16 @@ async function handleApi(request,env) {
   if (url.pathname === "/api/login" && request.method === "POST") {
     const body = await request.json().catch(()=>({}));
     if (!env.ADMIN_PASSWORD || !env.SESSION_SECRET) return json({error:"Admin secrets are not configured."},503);
-    if (typeof body.password !== "string" || body.password.length > 256 || body.password !== env.ADMIN_PASSWORD) return json({error:"Invalid password."},401);
+    const fingerprint = await ipFingerprint(request);
+    const cutoff = new Date(Date.now()-15*60*1000).toISOString();
+    await env.DB.prepare("DELETE FROM login_attempts WHERE attempted_at < ?").bind(cutoff).run();
+    const attempts = await env.DB.prepare("SELECT COUNT(*) AS count FROM login_attempts WHERE ip_hash=? AND attempted_at>=?").bind(fingerprint,cutoff).first();
+    if ((attempts?.count || 0) >= 8) return json({error:"Too many sign-in attempts. Try again in 15 minutes."},429);
+    if (typeof body.password !== "string" || body.password.length > 256 || body.password !== env.ADMIN_PASSWORD) {
+      await env.DB.prepare("INSERT INTO login_attempts(ip_hash,attempted_at) VALUES(?,?)").bind(fingerprint,new Date().toISOString()).run();
+      return json({error:"Invalid password."},401);
+    }
+    await env.DB.prepare("DELETE FROM login_attempts WHERE ip_hash=?").bind(fingerprint).run();
     const session = await makeSession(env.SESSION_SECRET);
     return json({ok:true},200,{ "set-cookie":cookie(session) });
   }
