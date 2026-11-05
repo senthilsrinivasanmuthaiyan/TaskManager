@@ -98,13 +98,13 @@ async function handleApi(request,env) {
     if (!env.ADMIN_PASSWORD || !env.SESSION_SECRET) return json({error:"Admin secrets are not configured."},503);
     if (typeof body.password !== "string" || body.password.length > 256 || body.password !== env.ADMIN_PASSWORD) return json({error:"Invalid password."},401);
     const session = await makeSession(env.SESSION_SECRET);
-    return json({ok:true},{status:200,headers:{ "set-cookie":cookie(session) }});
+    return json({ok:true},200,{ "set-cookie":cookie(session) });
   }
   if (url.pathname === "/api/health" && request.method === "GET") {
     return json({status:"ok",authenticated:await validSession(request,env.SESSION_SECRET||""),ai_enabled:env.AI_ENABLED==="true",model:MODEL});
   }
   if (url.pathname === "/api/logout" && request.method === "POST") {
-    return json({ok:true},{status:200,headers:{"set-cookie":cookie("",0)}});
+    return json({ok:true},200,{"set-cookie":cookie("",0)});
   }
   if (!await validSession(request,env.SESSION_SECRET||"")) return json({error:"Authentication required."},401);
   if (url.pathname === "/api/projects" && request.method === "GET") return json(PROJECTS);
