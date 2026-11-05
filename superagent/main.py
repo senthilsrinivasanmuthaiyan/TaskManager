@@ -35,7 +35,7 @@ async def dashboard():
 @app.get("/health")
 async def health():
     settings = get_settings()
-    return {"status": "ok", "deepseek_configured": bool(settings.deepseek_api_key),
+    return {"status": "ok", "model_configured": bool(settings.llm_model), "model": settings.llm_model,
             "github_configured": bool(settings.github_token), "github_writes_enabled": settings.github_write_enabled}
 
 
