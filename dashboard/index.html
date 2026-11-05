@@ -1,41 +1,59 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json"><link rel="icon" href="/icon.svg" type="image/svg+xml">
 <title>ERP Super Agent</title>
 <style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#131c31;--line:#263550;--muted:#9aabc4;--text:#edf3ff;--accent:#7c9cff;--ok:#50d6a0;--warn:#ffc66d;--bad:#ff8585}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#1b2b4a 0,transparent 35%),var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,Arial}
-main{max-width:1200px;margin:auto;padding:32px 22px}header{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:24px}
-h1{font-size:28px;margin:0;letter-spacing:-.04em}.sub{color:var(--muted);margin-top:5px}.pill{border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.metric,.panel{background:linear-gradient(145deg,#17233b,#10192b);border:1px solid var(--line);border-radius:16px;padding:17px}.metric b{display:block;font-size:25px;margin-top:6px}.metric span,.muted{color:var(--muted)}
-.panel{margin-top:16px}.panel h2{font-size:16px;margin:0 0 14px}.actions{display:flex;gap:9px;flex-wrap:wrap}
-button{background:var(--accent);color:#081126;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}button.secondary{background:#263653;color:var(--text);border:1px solid #344765}button:disabled{opacity:.5;cursor:wait}
-table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:600;font-size:12px}td a{color:#a9bdff;text-decoration:none}.status{font-size:12px;border-radius:999px;padding:4px 8px;background:#24334c}.status.ok{color:var(--ok)}.status.bad{color:var(--bad)}.status.pending{color:var(--warn)}
-textarea,select,input{width:100%;background:#0b1425;color:var(--text);border:1px solid #344765;border-radius:9px;padding:10px;font:inherit}textarea{min-height:95px;resize:vertical}.formgrid{display:grid;grid-template-columns:1fr 2fr 1fr;gap:10px;align-items:end}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}.output{white-space:pre-wrap;overflow:auto;max-height:460px;background:#091222;border:1px solid var(--line);border-radius:10px;padding:13px;margin-top:12px}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr}table{font-size:12px}th,td{padding:8px 5px}}
+:root{color-scheme:dark;--bg:#0b1020;--panel:#131e33;--panel2:#172640;--line:#293a57;--muted:#9aabc4;--text:#edf3ff;--accent:#91adff;--green:#56d6a1;--red:#ff8585;--amber:#ffcc7a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% -5%,#21365b 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+main{max-width:1050px;margin:auto;padding:calc(20px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}h1{font-size:24px;line-height:1.15;margin:0;letter-spacing:-.6px}.sub{color:var(--muted);font-size:13px;margin-top:5px}
+.pill{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:30px;white-space:nowrap}
+.panel{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:17px;padding:16px;margin:13px 0}
+h2{font-size:16px;margin:0 0 12px}.muted{color:var(--muted);font-size:13px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}
+.metric{background:#111b2e;border:1px solid var(--line);border-radius:13px;padding:12px}.metric span{font-size:12px;color:var(--muted)}.metric b{display:block;font-size:23px;margin-top:3px}
+button,select,input,textarea{font:inherit}button{border:0;border-radius:11px;padding:11px 14px;font-weight:700;background:var(--accent);color:#0a1428;cursor:pointer;min-height:44px}button.secondary{background:#243652;color:var(--text);border:1px solid #3b5275}button.danger{background:#4a2935;color:#ffdce2;border:1px solid #794353}button:disabled{opacity:.5}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{flex:1}
+.field{margin:10px 0}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+input,select,textarea{width:100%;background:#0b1425;color:var(--text);border:1px solid #344765;border-radius:10px;padding:12px;min-height:45px}textarea{min-height:110px;resize:vertical}
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.project{border:1px solid var(--line);background:#101a2d;border-radius:12px;padding:11px;min-width:0}
+.project strong{display:block;font-size:13px}.project small{display:block;color:var(--muted);font-size:11px;overflow-wrap:anywhere;margin-top:4px}
+.state{display:inline-block;font-size:11px;padding:3px 7px;border-radius:20px;background:#263652;color:var(--muted);margin-top:7px}.state.ok{color:var(--green)}.state.bad{color:var(--red)}.state.wait{color:var(--amber)}
+.output{white-space:pre-wrap;overflow-wrap:anywhere;max-height:440px;overflow:auto;background:#091222;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;font-size:13px}
+.history-item{padding:10px 0;border-bottom:1px solid var(--line)}.history-item:last-child{border:0}
+#app[hidden],#login[hidden]{display:none}.brand{display:flex;align-items:center;gap:10px}.brand img{width:40px;height:40px}
+a{color:var(--accent)}.foot{text-align:center;color:#7588a7;font-size:11px;padding:14px}
+@media(min-width:760px){main{padding-top:32px}.project-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:20px}.metrics{gap:13px}}
+@media(max-width:360px){h1{font-size:20px}.pill{font-size:10px}.project-grid{grid-template-columns:1fr}}
 </style></head>
 <body><main>
-<header><div><h1>ERP Super Agent</h1><div class="sub">DeepSeek-powered control plane · 11 independent ERP repositories</div></div><span class="pill" id="health">Connecting…</span></header>
-<section class="grid">
-<div class="metric"><span>Managed projects</span><b id="total">11</b></div>
-<div class="metric"><span>Audited</span><b id="audited">—</b></div>
-<div class="metric"><span>Blocked</span><b id="blocked">—</b></div>
-<div class="metric"><span>Recent runs</span><b id="runs">—</b></div>
-</section>
-<section class="panel"><h2>Portfolio control</h2><div class="actions"><button id="auditBtn" onclick="audit()">Run 11-project audit</button><button class="secondary" onclick="load()">Refresh status</button></div><div class="muted" id="auditNote" style="margin-top:10px">Audit reads GitHub repository metadata and open pull requests. It does not modify repositories.</div></section>
-<section class="panel"><h2>Project registry</h2><div style="overflow:auto"><table><thead><tr><th>Project</th><th>Repository</th><th>Status</th><th>Open PRs</th><th>Default branch</th></tr></thead><tbody id="projects"><tr><td colspan="5">Loading project registry…</td></tr></tbody></table></div></section>
-<section class="panel"><h2>Assign a specialist agent</h2><div class="formgrid">
-<div class="field"><label>Project</label><select id="project"></select></div>
-<div class="field"><label>Task request</label><input id="request" placeholder="e.g. Audit pending appointment workflow gaps and propose the next safe feature"></div>
-<div class="field"><label>Agent role</label><select id="role"><option value="router">Router</option><option value="auditor">Repository auditor</option><option value="competitor">Competitor analyst</option><option value="implementer">Implementation planner</option><option value="reviewer">Independent reviewer</option></select></div>
-</div><div style="margin-top:12px"><button onclick="submitTask()">Create agent plan</button></div><div class="muted" style="margin-top:9px">Current MVP produces repository-aware plans; isolated code-writing workers are a later phase.</div><pre class="output" id="output" hidden></pre></section>
-<section class="panel"><h2>Recent execution history</h2><div id="history" class="muted">No runs loaded.</div></section>
-</main>
+<header><div class="brand"><img src="/icon.svg" alt=""><div><h1>ERP Super Agent</h1><div class="sub">Your 11-project command centre</div></div></div><span id="connection" class="pill">Connecting</span></header>
+<section id="login" class="panel" hidden><h2>Secure sign in</h2><p class="muted">Sign in with the administrator password configured in your cloud Worker secrets.</p><form id="loginForm"><div class="field"><label for="password">Admin password</label><input id="password" type="password" autocomplete="current-password" required minlength="1"></div><button type="submit" style="width:100%">Sign in</button></form><p id="loginError" class="muted"></p></section>
+<div id="app" hidden>
+<div class="metrics"><div class="metric"><span>ERP projects</span><b id="total">11</b></div><div class="metric"><span>Audited</span><b id="audited">—</b></div><div class="metric"><span>Blocked</span><b id="blocked">—</b></div></div>
+<section class="panel"><h2>Portfolio overview</h2><div class="actions"><button id="auditBtn">Audit all 11 projects</button><button id="refreshBtn" class="secondary">Refresh</button><button id="logoutBtn" class="secondary">Sign out</button></div><p id="auditNote" class="muted">Read-only GitHub audit. No repository files are modified.</p><pre id="auditSummary" class="output" hidden></pre></section>
+<section class="panel"><h2>Project registry</h2><div id="projects" class="project-grid"></div></section>
+<section class="panel"><h2>Assign an AI specialist</h2><form id="taskForm">
+<div class="field"><label for="project">Project</label><select id="project"></select></div>
+<div class="field"><label for="role">Agent role</label><select id="role"><option value="router">Portfolio router</option><option value="auditor">Repository auditor</option><option value="competitor">Competitor analyst</option><option value="implementer">Implementation planner</option><option value="reviewer">Independent reviewer</option></select></div>
+<div class="field"><label for="request">What should the agent work on?</label><textarea id="request" minlength="5" maxlength="4000" placeholder="Example: Review open fleet onboarding features and prepare the next implementation plan." required></textarea></div>
+<button id="taskBtn" type="submit" style="width:100%">Generate agent plan</button></form><pre id="taskOutput" class="output" hidden></pre><p class="muted">Planning only in this release. Coding workers and automatic merges are not yet enabled.</p></section>
+<section class="panel"><h2>Recent activity</h2><div id="history" class="muted">No activity loaded.</div></section>
+<p class="foot">ERP Super Agent · Mobile PWA · GitHub read-only control plane</p>
+</div></main>
 <script>
-async function api(path,opts={}){const r=await fetch(path,{headers:{"Content-Type":"application/json"},...opts});const d=await r.json();if(!r.ok)throw new Error(d.detail||r.statusText);return d}
-async function load(){try{const [health,projects,runs]=await Promise.all([api("/health"),api("/api/projects"),api("/api/runs")]);document.getElementById("health").textContent="API online · DeepSeek "+(health.model_configured?"configured":"not configured")+" · Model "+(health.model||"unknown")+" · GitHub "+(health.github_configured?"connected":"not connected");document.getElementById("total").textContent=projects.length;document.getElementById("runs").textContent=runs.length;document.getElementById("project").innerHTML=projects.map(p=>'<option value="'+p.key+'">'+p.name+'</option>').join("");document.getElementById("projects").innerHTML=projects.map(p=>'<tr><td><b>'+p.name+'</b></td><td><a href="https://github.com/'+p.repository+'" target="_blank" rel="noreferrer">'+p.repository+'</a></td><td><span class="status pending">Not audited</span></td><td>—</td><td>main</td></tr>').join("");document.getElementById("history").innerHTML=runs.length?runs.map(r=>'<div style="padding:8px 0;border-bottom:1px solid #263550"><b>#'+r.id+' · '+r.run_type+'</b> <span class="muted">· '+r.status+' · '+r.created_at+'</span><div class="muted">'+r.request+'</div></div>').join(""):"No runs yet."}catch(e){document.getElementById("health").textContent="API error: "+e.message}}
-async function audit(){const b=document.getElementById("auditBtn");b.disabled=true;b.textContent="Auditing…";document.getElementById("auditNote").textContent="Reading repository metadata and asking the project auditors. This may take a minute.";try{const d=await api("/api/audit",{method:"POST"});document.getElementById("audited").textContent=d.audited;document.getElementById("blocked").textContent=d.blocked;document.getElementById("projects").innerHTML=d.projects.map(p=>'<tr><td><b>'+p.name+'</b></td><td><a href="https://github.com/'+(p.facts?.repository||'')+'" target="_blank" rel="noreferrer">'+(p.facts?.repository||p.project_key)+'</a></td><td><span class="status '+(p.status==="audited"?"ok":"bad")+'">'+p.status+'</span>'+(p.blocker?'<div class="muted">'+p.blocker+'</div>':'')+'</td><td>'+(p.facts?.open_pull_requests?.length??"—")+'</td><td>'+(p.facts?.default_branch||"—")+'</td></tr>').join("");document.getElementById("auditNote").textContent="Audit complete. "+d.audited+" audited · "+d.blocked+" blocked. No code was changed.";document.getElementById("output").hidden=false;document.getElementById("output").textContent=d.projects.map(p=>p.name+"\n"+(p.analysis||p.blocker||"No details")).join("\n\n");await load()}catch(e){document.getElementById("auditNote").textContent="Audit failed: "+e.message}finally{b.disabled=false;b.textContent="Run 11-project audit"}}
-async function submitTask(){const body={project_key:document.getElementById("project").value,request:document.getElementById("request").value,role:document.getElementById("role").value};const out=document.getElementById("output");out.hidden=false;out.textContent="Agent is preparing a plan…";try{const d=await api("/api/tasks",{method:"POST",body:JSON.stringify(body)});out.textContent=d.plan;await load()}catch(e){out.textContent="Task failed: "+e.message}}
-load();
+const $=id=>document.getElementById(id);
+async function api(path,options={}){const response=await fetch(path,{credentials:"same-origin",...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||data.detail||"Request failed ("+response.status+")");return data}
+function showApp(yes){$("app").hidden=!yes;$("login").hidden=yes}
+async function init(){try{const h=await api("/api/health");$("connection").textContent="Cloud connected · "+(h.ai_enabled?"AI enabled":"AI paused");showApp(h.authenticated);if(h.authenticated)await load()}catch(e){$("connection").textContent="Connection error";$("loginError").textContent=e.message;showApp(false);$("login").hidden=false}}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginError").textContent="Signing in…";try{await api("/api/login",{method:"POST",body:JSON.stringify({password:$("password").value})});$("password").value="";showApp(true);await load()}catch(err){$("loginError").textContent=err.message}});
+$("logoutBtn").onclick=async()=>{await api("/api/logout",{method:"POST"});showApp(false);$("login").hidden=false;$("connection").textContent="Signed out"};
+$("refreshBtn").onclick=load;
+async function load(){try{const [projects,runs]=await Promise.all([api("/api/projects"),api("/api/runs")]);$("total").textContent=projects.length;$("project").innerHTML=projects.map(p=>'<option value="'+p.key+'">'+p.name+'</option>').join("");$("projects").innerHTML=projects.map(p=>'<article class="project"><strong>'+p.name+'</strong><small>'+p.repo+'</small><span class="state">Awaiting audit</span></article>').join("");$("history").innerHTML=runs.length?runs.map(r=>'<div class="history-item"><strong>#'+r.id+' · '+r.run_type+'</strong><div class="muted">'+r.status+' · '+new Date(r.created_at).toLocaleString()+'</div><div class="muted">'+r.request+'</div></div>').join(""):"No activity yet."}catch(e){$("auditNote").textContent=e.message}}
+$("auditBtn").onclick=async()=>{const b=$("auditBtn");b.disabled=true;b.textContent="Auditing…";$("auditNote").textContent="Checking repository metadata, branches and open pull requests…";try{const d=await api("/api/audit",{method:"POST"});$("audited").textContent=d.audited;$("blocked").textContent=d.blocked;$("projects").innerHTML=d.projects.map(p=>'<article class="project"><strong>'+p.name+'</strong><small>'+p.repository+'</small><span class="state '+(p.status==="audited"?"ok":"bad")+'">'+p.status+'</span><small>'+(p.status==="audited"?(p.open_pull_requests.length+" open PRs · "+p.branches.length+" branches · "+p.default_branch):p.blocker)+'</small><small><a href="'+(p.url||"https://github.com/"+p.repository)+'" target="_blank" rel="noopener">Open GitHub ↗</a></small></article>').join("");$("auditNote").textContent=d.audited+" repositories audited · "+d.blocked+" blocked. Metadata only; source code was not modified.";$("auditSummary").hidden=false;$("auditSummary").textContent=d.analysis?.answer||d.analysis?.error||"Audit complete." ;await load()}catch(e){$("auditNote").textContent="Audit error: "+e.message}finally{b.disabled=false;b.textContent="Audit all 11 projects"}};
+$("taskForm").addEventListener("submit",async e=>{e.preventDefault();const b=$("taskBtn");b.disabled=true;b.textContent="Preparing plan…";$("taskOutput").hidden=false;$("taskOutput").textContent="Contacting AI agent…";try{const d=await api("/api/tasks",{method:"POST",body:JSON.stringify({project_key:$("project").value,role:$("role").value,request:$("request").value})});$("taskOutput").textContent=d.answer||JSON.stringify(d,null,2);await load()}catch(err){$("taskOutput").textContent=err.message}finally{b.disabled=false;b.textContent="Generate agent plan"}});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
+init();
 </script></body></html>

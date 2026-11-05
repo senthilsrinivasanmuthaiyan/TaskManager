@@ -98,3 +98,17 @@ This is a read/audit/plan coordinator, not yet an autonomous code-writing worker
 ## Project registry
 
 The 11 repositories are configured in `superagent/projects.py`. Retail is `senthilsrinivasanmuthaiyan1/retail`; Universal POS is `senthilsrinivasanmuthaiyan/universal-pos`; SaaS Admin is `senthilsrinivasanmuthaiyan/sassadmin`.
+
+
+## Mobile cloud control plane (free-tier deployment)
+
+A mobile-first installable PWA and Cloudflare Worker implementation is available on the `feature/mobile-cloud-control-plane` branch. It includes:
+- Responsive Android dashboard and PWA manifest/service worker.
+- Cloudflare Worker API with signed HttpOnly sessions and login rate limiting.
+- D1 audit/run history and 11-repository read-only GitHub metadata audit.
+- DeepSeek R1 Distill Qwen 32B through Cloudflare Workers AI, bounded by the Free-plan daily allocation.
+- Deployment instructions in `docs/MOBILE_CLOUD_DEPLOYMENT.md`.
+
+Cloud deployment requires the owner to create a Cloudflare D1 database, set the two GitHub read-only tokens and admin/session secrets, and deploy the Worker. No Cloudflare account credentials or GitHub tokens are stored in this repository. The app is not deployed yet. Keep Cloudflare on its Free plan to preserve the ₹0 monthly budget; AI calls can fail after the free daily allocation is exhausted.
+
+The cloud control plane currently supports mobile login, repository metadata audits, run history and AI-generated plans. It does not yet write to product repositories or perform autonomous code changes/merges.
