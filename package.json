@@ -1,0 +1,15 @@
+{
+  "name": "erp-super-agent-cloud",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Mobile-first Cloudflare control plane for 11 ERP repositories",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply erp-super-agent --local",
+    "db:migrate:remote": "wrangler d1 migrations apply erp-super-agent --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
