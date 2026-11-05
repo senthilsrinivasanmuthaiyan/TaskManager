@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pathlib import Path
 from pydantic import BaseModel, Field
 from .config import get_settings
 from .orchestrator import portfolio_audit, run_project_task
@@ -23,6 +25,11 @@ class TaskRequest(BaseModel):
     project_key: str
     request: str = Field(min_length=5, max_length=8000)
     role: str = "router"
+
+
+@app.get("/", include_in_schema=False)
+async def dashboard():
+    return FileResponse(Path(__file__).resolve().parent.parent / "dashboard" / "index.html")
 
 
 @app.get("/health")
