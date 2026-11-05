@@ -1,0 +1,18 @@
+name = "erp-super-agent-mobile"
+main = "cloudflare/worker.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[assets]
+directory = "./dashboard"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+[[ai]]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "erp-super-agent"
+database_id = "REPLACE_AFTER_CREATING_D1"
+migrations_dir = "cloudflare/migrations"
