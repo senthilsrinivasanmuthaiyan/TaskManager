@@ -3,6 +3,9 @@ main = "cloudflare/worker.js"
 compatibility_date = "2026-10-01"
 workers_dev = true
 
+[vars]
+AI_ENABLED = "true"
+
 [assets]
 directory = "./dashboard"
 binding = "ASSETS"
